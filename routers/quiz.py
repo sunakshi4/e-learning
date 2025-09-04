@@ -79,21 +79,8 @@ def add_choice(question_id: int, text: str, is_correct:bool = False, session: Se
 
 #student apis
 @router.get("", response_model= List[Quiz])
-def list_all_quiz(session: Session= Depends(get_session)):
+def list_all_quiz(session: Session= Depends(get_session),  user: User = Depends(get_current_user)):
     return session.exec(select(Quiz)).all()
-
-
-# @router.post("/{quiz_id}/start", response_model=Submission)
-# def start_quiz(quiz_id: int, session: Session= Depends(get_session), user: User= Depends(get_current_user)):
-#     quiz= session.get(Quiz, quiz_id)
-#     if not quiz:
-#         raise HTTPException(status_code=404, detail="quiz not found")
-    
-#     sub= Submission(quiz_id=quiz_id, user_id=user.id)
-#     session.add(sub)
-#     session.commit()
-#     session.refresh(sub)
-#     return sub
 
 @router.post("/submissions/{quiz_id}/submit")
 def submit_quiz(quiz_id: int, 

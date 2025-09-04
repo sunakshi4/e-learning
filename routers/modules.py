@@ -25,7 +25,7 @@ def create_module(course_id: int, title: str, order: int = 0, content: str| None
     return module
 
 @router.get("/by-course/{course_id}", response_model=List[Module])
-def list_modules(course_id: int, session: Session = Depends(get_session)):
+def list_modules(course_id: int, session: Session = Depends(get_session),  user: User = Depends(get_current_user)):
     return session.exec(select(Module).where(Module.course_id == course_id).order_by(Module.order, Module.id)).all()
 
 @router.delete("/{module_id}", status_code=204, dependencies=[Depends(require_roles("instructor"))])

@@ -22,7 +22,6 @@ class UserCreate(UserBase):
     password: str
     role: Optional[str]=RoleEnum.student
 
-
 #course
 class CourseBase(SQLModel):
     title: str

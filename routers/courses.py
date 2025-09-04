@@ -17,15 +17,15 @@ def create_course(payload: CourseCreate, session:Session = Depends(get_session),
     session.refresh(course)
     return course
 
-@router.get("", response_model=List[Course])
-def list_courses(instructor_id: Optional[int] = None, session: Session = Depends(get_session)):
+@router.get("", response_model=List[Course], )
+def list_courses(instructor_id: Optional[int] = None, session: Session = Depends(get_session),  user: User = Depends(get_current_user)):
     q = select(Course)
     if instructor_id is not None:
         q = q.where(Course.instructor_id == instructor_id)
     return session.exec(select(Course)).all()
 
 @router.get("/{course_id}", response_model=Course)
-def get_course(course_id: int, session: Session = Depends(get_session)):
+def get_course(course_id: int, session: Session = Depends(get_session), user: User = Depends(get_current_user)):
     course = session.get(Course, course_id)
     if not course:
         raise HTTPException(status_code=404, detail="Course not found")
